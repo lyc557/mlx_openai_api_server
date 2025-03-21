@@ -2,3 +2,4 @@ fastapi==0.109.0
 uvicorn==0.25.0
 mlx==0.1.0  # 按需选择 MLX 版本
 mlx-lm==0.0.7
+python-dotenv==1.0.0

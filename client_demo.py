@@ -11,7 +11,7 @@ def chat_with_model(prompt, model="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", t
         "Content-Type": "application/json",
         "Authorization": "user1"  # 替换为你的API密钥
     }
-    
+
     data = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}]
