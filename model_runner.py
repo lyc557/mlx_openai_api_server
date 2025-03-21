@@ -2,11 +2,15 @@ import mlx.core as mx
 import os 
 from mlx_lm import load, generate
 from dotenv import load_dotenv
+from config import MODEL_CONFIG
 
 class ModelRunner:
-    def __init__(self, model_id="deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"):
+    def __init__(self, model_id=None):
         # 加载环境变量
         load_dotenv()
+        
+        # 使用传入的model_id或配置文件中的默认值
+        self.model_id = model_id or MODEL_CONFIG["default_model"]
         
         # 如果设置了环境变量，则配置代理
         if os.getenv('PROXY_HOST') and os.getenv('PROXY_PORT'):
@@ -15,9 +19,8 @@ class ModelRunner:
             os.environ['HTTP_PROXY'] = proxy_url
             print(f"[ModelRunner] Proxy configured: {proxy_url}")
 
-        self.model_id = model_id
-        print(f"[ModelRunner] Loading model: {model_id}")
-        self.model, self.tokenizer = load(model_id)
+        print(f"[ModelRunner] Loading model: {self.model_id}")
+        self.model, self.tokenizer = load(self.model_id)
         print("[ModelRunner] Model loaded successfully.")
         
 
