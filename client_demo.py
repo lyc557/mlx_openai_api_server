@@ -4,19 +4,12 @@ import json
 def chat_with_model(prompt, model="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", temperature=None):
     """
     与本地运行的大模型API服务进行对话
-    
-    Args:
-        prompt: 用户输入的问题或提示
-        model: 模型名称，默认为"deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
-        temperature: 温度参数，控制输出的随机性，如果为None则不传递该参数
-    
-    Returns:
-        模型的回复文本
     """
-    url = "http://localhost:8000/v1/chat/completions"
+    url = "http://localhost:8888/v1/chat/completions"
     
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "user1"  # 替换为你的API密钥
     }
     
     data = {
