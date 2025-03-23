@@ -9,7 +9,7 @@ def chat_with_model(prompt, model="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", t
     
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "user1"  # 替换为你的API密钥
+        "Authorization": "test-api-key"  # 替换为你的API密钥
     }
 
     data = {
