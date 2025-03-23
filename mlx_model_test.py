@@ -2,10 +2,21 @@ from huggingface_hub import list_models, model_info
 import time
 import requests.exceptions
 import os
+from dotenv import load_dotenv
+
+# 从.env文件加载环境变量
+load_dotenv()
 
 # 设置代理
-os.environ['HTTPS_PROXY'] = 'http://10.45.9.130:9666'  # 根据你的代理端口修改
-os.environ['HTTP_PROXY'] = 'http://10.45.9.130:9666'   # 根据你的代理端口修改
+proxy_host = os.getenv("PROXY_HOST")
+proxy_port = os.getenv("PROXY_PORT")
+if proxy_host and proxy_port:
+    proxy_url = f"http://{proxy_host}:{proxy_port}"
+    os.environ['HTTPS_PROXY'] = proxy_url
+    os.environ['HTTP_PROXY'] = proxy_url
+    print(f"已设置代理: {proxy_url}")
+else:
+    print("未找到代理设置或.env文件中缺少PROXY_HOST和PROXY_PORT")
 
 def check_model_exists(model_id, max_retries=3):
     for attempt in range(max_retries):
