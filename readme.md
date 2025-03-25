@@ -1,12 +1,23 @@
 ### 启动方式 ###
 # 本地运行
-# python3 -m venv venv && source venv/bin/activate
+```bash
+python3 -m venv venv && source venv/bin/activate
 # pip install -r requirements.txt
 # uvicorn main:app --host 0.0.0.0 --port 8000
+```
 
-# Docker 运行（可选）
-# docker build -t mlx-openai-api .
-# docker run -p 8000:8000 mlx-openai-api
+# 端口如占用
+```bash
+lsfo -i :8000
+kill -9 进程号
+```
+或者根据启动时答应的信息看情况修改端口
+```bash
+INFO:     Started server process [49796]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+```
 
 ### 模型配置 ###
 模型配置在 config.py 文件中管理，目前支持以下模型：
