@@ -27,6 +27,7 @@ class ModelRunner:
     def chat(self, messages: list):
         # 拼接 prompt
         prompt = ""
+
         for msg in messages:
             if msg["role"] == "system":
                 prompt += f"[System]: {msg['content']}\n"
@@ -34,7 +35,7 @@ class ModelRunner:
                 prompt += f"[User]: {msg['content']}\n"
             elif msg["role"] == "assistant":
                 prompt += f"[Assistant]: {msg['content']}\n"
-        print(f"[ModelRunner] Prompt: {prompt}")
+        print(f"大模型Prompt: {prompt}")
 
         # 推理
         output = generate(self.model, self.tokenizer, prompt, verbose=True)
