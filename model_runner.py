@@ -10,7 +10,7 @@ class ModelRunner:
         load_dotenv()
         
         # 使用传入的model_id或配置文件中的默认值
-        self.model_id = model_id or MODEL_CONFIG["default_model"]
+        self.model_id = MODEL_CONFIG["default_model"]
         
         # 如果设置了环境变量，则配置代理
         if os.getenv('PROXY_HOST') and os.getenv('PROXY_PORT'):
@@ -24,7 +24,7 @@ class ModelRunner:
         print("[ModelRunner] Model loaded successfully.")
         
 
-    def chat(self, messages: list):
+    def chat(self, messages: list, max_tokens=2048):
         # 拼接 prompt
         prompt = ""
         for msg in messages:
@@ -37,17 +37,19 @@ class ModelRunner:
         
         # 检查token数量并截断
         tokens = self.tokenizer.encode(prompt)
-        max_tokens = MODEL_CONFIG.get("max_tokens", 16000)  # 从配置中获取最大token数，默认16000
-        
-        if len(tokens) > max_tokens:
-            print(f"[ModelRunner] Warning: Input too long ({len(tokens)} tokens), truncating to {max_tokens} tokens")
-            tokens = tokens[:max_tokens]
-            prompt = self.tokenizer.decode(tokens)
-        
-        print(f"[ModelRunner] Prompt: {prompt}")
     
-        # 推理
-        output = generate(self.model, self.tokenizer, prompt, verbose=True)
-        print(f"[ModelRunner] Output: {output}")
-    
-        return output
+        # 推理，增加max_tokens参数
+        output = generate(
+            self.model, 
+            self.tokenizer, 
+            prompt, 
+            verbose=True,
+            max_tokens=max_tokens  # 增加最大输出token数量
+        )
+        
+        # 清理输出中的特殊标记
+        cleaned_output = output.replace("<|im_start|>", "").replace("<|im_end|>", "")
+        
+        print(f"[ModelRunner] Output: {cleaned_output}")
+        
+        return cleaned_output
