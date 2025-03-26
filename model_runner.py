@@ -34,10 +34,20 @@ class ModelRunner:
                 prompt += f"[User]: {msg['content']}\n"
             elif msg["role"] == "assistant":
                 prompt += f"[Assistant]: {msg['content']}\n"
+        
+        # 检查token数量并截断
+        tokens = self.tokenizer.encode(prompt)
+        max_tokens = MODEL_CONFIG.get("max_tokens", 16000)  # 从配置中获取最大token数，默认16000
+        
+        if len(tokens) > max_tokens:
+            print(f"[ModelRunner] Warning: Input too long ({len(tokens)} tokens), truncating to {max_tokens} tokens")
+            tokens = tokens[:max_tokens]
+            prompt = self.tokenizer.decode(tokens)
+        
         print(f"[ModelRunner] Prompt: {prompt}")
-
+    
         # 推理
         output = generate(self.model, self.tokenizer, prompt, verbose=True)
         print(f"[ModelRunner] Output: {output}")
-
+    
         return output

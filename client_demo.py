@@ -5,7 +5,7 @@ def chat_with_model(prompt, model="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", t
     """
     与本地运行的大模型API服务进行对话
     """
-    url = "http://localhost:8888/v1/chat/completions"
+    url = "http://10.45.9.130:8888/v1/chat/completions"
     
     headers = {
         "Content-Type": "application/json",
