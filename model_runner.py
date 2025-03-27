@@ -35,6 +35,7 @@ class ModelRunner:
             elif msg["role"] == "assistant":
                 prompt += f"[Assistant]: {msg['content']}\n"
         
+        print(f"[ModelRunner] Prompt: {prompt}")
         # 检查token数量并截断
         tokens = self.tokenizer.encode(prompt)
     
