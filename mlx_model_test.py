@@ -48,8 +48,9 @@ def get_model_max_tokens(model_id, max_retries=3):
     for attempt in range(max_retries):
         try:
             info = model_info(model_id)
-            
-            # 尝试从模型卡片的配置信息中获取
+            print(info)
+            # 尝试从模型卡片的配置信息中获取print(config.max_position_embeddings)
+
             if hasattr(info, 'config') and info.config:
                 config = json.loads(info.config)
                 if 'max_position_embeddings' in config:
@@ -58,26 +59,9 @@ def get_model_max_tokens(model_id, max_retries=3):
                     return config['n_positions']
                 elif 'max_sequence_length' in config:
                     return config['max_sequence_length']
-            
-            # 如果无法从配置中获取，则根据模型类型推断
-            model_defaults = {
-                "qwen": 8192,
-                "deepseek": 4096,
-                "mistral": 8192,
-                "minicpm": 4096,
-                "llama": 4096
-            }
-            
-            # 根据模型ID判断模型类型
-            model_name = model_id.lower()
-            for model_type, max_tokens in model_defaults.items():
-                if model_type in model_name:
-                    print(f"根据模型名称推断最大token限制: {max_tokens}")
-                    return max_tokens
-            
-            # 如果无法确定，返回保守的默认值
-            print("无法确定模型的最大token限制，使用默认值: 2048")
-            return 2048
+                else:
+                    print("无法确定模型的最大token限制")
+                    return None
             
         except requests.exceptions.ConnectionError as e:
             if attempt < max_retries - 1:
@@ -93,10 +77,12 @@ def get_model_max_tokens(model_id, max_retries=3):
 
 # 测试模型ID
 model_id = MODEL_CONFIG["default_model"]  # 修正：使用字典访问方式
-exists = check_model_exists(model_id)
-print(f"\n模型 {model_id} {'存在' if exists else '不存在'}")
-
-# 获取模型的最大token限制
-if exists:
-    max_tokens = get_model_max_tokens(model_id)
-    print(f"模型 {model_id} 的最大token限制: {max_tokens}")
+# 遍历所有可用模型进行检查
+for model_id in MODEL_CONFIG["available_models"]:
+    exists = check_model_exists(model_id)
+    print(f"\n模型 {model_id} {'存在' if exists else '不存在'}")
+    
+    # 获取模型的最大token限制
+    if exists:
+        max_tokens = get_model_max_tokens(model_id)
+        print(f"模型 {model_id} 的最大token限制: {max_tokens}")

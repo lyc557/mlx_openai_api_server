@@ -1,7 +1,7 @@
 import requests
 import json
 
-def chat_with_model(prompt, model="Qwen/Qwen2.5-3B-Instruct", temperature=None):
+def chat_with_model(prompt, model="mlx-community/Qwen2.5-7B-Instruct-1M-8bit", temperature=None):
     """
     与本地运行的大模型API服务进行对话
     """
@@ -41,63 +41,20 @@ def chat_with_model(prompt, model="Qwen/Qwen2.5-3B-Instruct", temperature=None):
         return f"错误: {response.status_code}, {response.text}"
 
 def main():
-
-    QA_GEN_PROMPT_TMPL = """
-        我会给你一段文本（<document></document>之间的部分），请仔细阅读并生成5个高质量的问答对。要求如下
-        1. 问题要求：
-        - 问题必须与文本内容直接相关
-        - 避免询问文档结构相关的问题（如"在哪一章"）
-        - 问题应该有实质性的信息价值
-        - 优先生成需要理解和分析的问题，而不是简单的事实查找
-        2. 上下文要求：
-        - 必须是原文的直接引用，不允许任何形式的改写
-        - 应该包含完整的相关信息，确保上下文自包含
-        - 如果信息分散在多处，可以用"..."连接相关段落
-        3. 答案要求：
-        - 基于上下文直接回答问题
-        - 保持完整性和准确性
-        - 简明扼要，避免冗余
-        - 使用肯定的语气
-        - 不要引用文档结构（如章节、页码）
-
-        返回格式：
-        [
-            {
-                "question": "问题描述",
-                "context": "原文引用",
-                "answer": "基于上下文的答案"
-            },
-            {
-                "question": "问题描述",
-                "context": "原文引用",
-                "answer": "基于上下文的答案"
-            },
-            {
-                "question": "问题描述",
-                "context": "原文引用",
-                "answer": "基于上下文的答案"
-            },
-            {
-                "question": "问题描述",
-                "context": "原文引用",
-                "answer": "基于上下文的答案"
-            },
-            {
-                "question": "问题描述",
-                "context": "原文引用",
-                "answer": "基于上下文的答案"
-            }
-        ]
-
-        如果文本主要是目录、人名列表、联系方式等无实质内容的信息，请返回空数组 []。
-
-        下方是待分析文本：
-        <document>
-        {{document}}
-        </document>
-    """
+    print("欢迎使用本地大模型聊天程序！输入'退出'结束对话。")
+    
+    while True:
+        user_input = input("\n你: ")
         
-    response = chat_with_model(user_input)
+        if user_input.lower() in ["退出", "exit", "quit"]:
+            print("再见！")
+            break
+        
+        print("\n正在思考...")
+        response = chat_with_model(user_input)
+        print(f"\n大模型: {response}")
+
+    # QA_GEN_PROMPT_TMPL 可以保留，但不在这里直接使用
 
 
 if __name__ == "__main__":
